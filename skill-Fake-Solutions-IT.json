@@ -1,0 +1,645 @@
+{
+  "intents": [
+    {
+      "intent": "problema",
+      "examples": [
+        {
+          "text": "ainda tenho outro problema"
+        },
+        {
+          "text": "estou com problema"
+        },
+        {
+          "text": "tenho outro problema"
+        },
+        {
+          "text": "tenho um problema"
+        },
+        {
+          "text": "tenho um problema a mais"
+        }
+      ],
+      "description": "tenho um problema"
+    },
+    {
+      "intent": "sobre",
+      "examples": [
+        {
+          "text": "essa empresa para que serve"
+        },
+        {
+          "text": "o que a empresa oferece"
+        },
+        {
+          "text": "quais os serviços oferecidos"
+        },
+        {
+          "text": "quais os serviços que a empresa presta"
+        }
+      ],
+      "description": "me fala um pouco mais sobre a empresa"
+    },
+    {
+      "intent": "transferencia",
+      "examples": [
+        {
+          "text": "me transfere para outra pessoa"
+        },
+        {
+          "text": "me transfere para um humano"
+        },
+        {
+          "text": "quero falar com uma pessoa"
+        },
+        {
+          "text": "quero falar com um atendente"
+        },
+        {
+          "text": "quero ser transferido"
+        }
+      ],
+      "description": "transferencia para um humano"
+    }
+  ],
+  "entities": [
+    {
+      "entity": "impressora",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "impressora",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "impressora local",
+          "synonyms": []
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "modelo",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "A1201",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "A1202",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "A1203",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "B904",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "B905",
+          "synonyms": []
+        }
+      ],
+      "fuzzy_match": true
+    },
+    {
+      "entity": "resposta",
+      "values": [
+        {
+          "type": "synonyms",
+          "value": "não",
+          "synonyms": []
+        },
+        {
+          "type": "synonyms",
+          "value": "sim",
+          "synonyms": []
+        }
+      ],
+      "fuzzy_match": true
+    }
+  ],
+  "metadata": {
+    "api_version": {
+      "major_version": "v2",
+      "minor_version": "2018-11-08"
+    }
+  },
+  "webhooks": [
+    {
+      "url": "https://help.maratona.dev",
+      "name": "main_webhook",
+      "headers": []
+    }
+  ],
+  "dialog_nodes": [
+    {
+      "type": "standard",
+      "title": "Bem-vindo",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Olá sou Emanuela, assistente virtual do Fake Solutions,. Como posso te chamar ?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "context": {
+        "nome": "",
+        "cidade": ""
+      },
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_5_1639259999202"
+      },
+      "conditions": "welcome && conversation_start",
+      "dialog_node": "Bem-vindo"
+    },
+    {
+      "type": "event_handler",
+      "parent": "slot_9_1639347030468",
+      "event_name": "input",
+      "dialog_node": "handler_10_1639347030487"
+    },
+    {
+      "type": "event_handler",
+      "parent": "node_5_1639259999202",
+      "event_name": "focus",
+      "dialog_node": "handler_1_1639347029777"
+    },
+    {
+      "type": "event_handler",
+      "output": {},
+      "parent": "slot_9_1639347030468",
+      "event_name": "focus",
+      "dialog_node": "handler_9_1639347030487",
+      "previous_sibling": "handler_10_1639347030487"
+    },
+    {
+      "type": "standard",
+      "parent": "node_8_1639352524394",
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_5_1639350173961"
+      },
+      "conditions": "@resposta:sim",
+      "dialog_node": "node_10_1639353989296"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "tentar novamente em breve e encerrar a conversação"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_4_1639354857406",
+      "conditions": "$webhook_result_1.available==false",
+      "dialog_node": "node_1_1639357296195",
+      "previous_sibling": "node_8_1639357197653"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "https://fake.drivers.example.com/printer/A1201"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_9_1639351987294",
+      "conditions": "@modelo:A1201",
+      "dialog_node": "node_4_1639352339183",
+      "previous_sibling": "node_5_1639352109228"
+    },
+    {
+      "type": "standard",
+      "title": "webhoock",
+      "parent": "node_7_1639353994712",
+      "actions": [
+        {
+          "name": "main_webhook",
+          "type": "webhook",
+          "parameters": {
+            "city": "$cidade",
+            "name": "$nome",
+            "problem": "$problema"
+          },
+          "result_variable": "webhook_result_1"
+        }
+      ],
+      "metadata": {
+        "_customization": {
+          "mcr": true
+        }
+      },
+      "next_step": {
+        "behavior": "skip_user_input"
+      },
+      "conditions": "@resposta:sim",
+      "dialog_node": "node_4_1639354857406"
+    },
+    {
+      "type": "standard",
+      "title": "nome",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "qual sua cidade ?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "Bem-vindo",
+      "context": {
+        "nome": "<? input_text ?>"
+      },
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_6_1639349086446"
+      },
+      "conditions": "true",
+      "dialog_node": "node_5_1639259999202"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "qual seu problema ?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_6_1639349086446",
+      "conditions": "#problema",
+      "dialog_node": "node_5_1639350173961"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "https://fake.drivers.example.com/printer/B904"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_9_1639351987294",
+      "conditions": "@modelo:B904",
+      "dialog_node": "node_5_1639352109228"
+    },
+    {
+      "type": "standard",
+      "title": "cidade",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "como pode ajudar ?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "Bem-vindo",
+      "context": {
+        "cidade": "<? input_text ?>"
+      },
+      "next_step": {
+        "behavior": "jump_to",
+        "selector": "user_input",
+        "dialog_node": "node_5_1639350173961"
+      },
+      "conditions": "true",
+      "dialog_node": "node_6_1639349086446",
+      "previous_sibling": "node_5_1639259999202"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "https://fake.drivers.example.com/printer/B905"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_9_1639351987294",
+      "conditions": "@modelo:B905",
+      "dialog_node": "node_6_1639352464223",
+      "previous_sibling": "node_8_1639352406791"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "boa noite"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_7_1639353994712",
+      "conditions": "@resposta:não",
+      "dialog_node": "node_6_1639354879770",
+      "previous_sibling": "node_4_1639354857406"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Você quer ser transferido para um humano ?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_8_1639352524394",
+      "conditions": "@resposta:não",
+      "dialog_node": "node_7_1639353994712",
+      "previous_sibling": "node_10_1639353989296"
+    },
+    {
+      "type": "standard",
+      "title": "sobre",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "A empresa Fake IT Solutions é lider de mercado em problemas com impressoras"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "#sobre",
+      "dialog_node": "node_7_1639358524838",
+      "previous_sibling": "Bem-vindo"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "boa noite"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_4_1639354857406",
+      "conditions": "anything_else",
+      "dialog_node": "node_7_1639358903720",
+      "previous_sibling": "node_1_1639357296195"
+    },
+    {
+      "type": "standard",
+      "title": "em outras casos",
+      "conditions": "anything_else",
+      "dialog_node": "node_8_1639258651601",
+      "previous_sibling": "node_9_1639351987294"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "https://fake.drivers.example.com/printer/A1202"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_9_1639351987294",
+      "conditions": "@modelo:A1202",
+      "dialog_node": "node_8_1639352386487",
+      "previous_sibling": "node_4_1639352339183"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "https://fake.drivers.example.com/printer/A1203"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_9_1639351987294",
+      "conditions": "@modelo:A1203",
+      "dialog_node": "node_8_1639352406791",
+      "previous_sibling": "node_8_1639352386487"
+    },
+    {
+      "type": "standard",
+      "title": "outro",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Você tem outro problema ? "
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          },
+          {
+            "values": [],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_9_1639351987294",
+      "context": {
+        "outro": "<? input_text ?>"
+      },
+      "conditions": "anything_else",
+      "dialog_node": "node_8_1639352524394",
+      "previous_sibling": "node_6_1639352464223"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "transferindo"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_4_1639354857406",
+      "conditions": "$webhook_result_1.available==true",
+      "dialog_node": "node_8_1639357197653"
+    },
+    {
+      "type": "standard",
+      "title": "impressora",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Qual seu modelo?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "context": {
+        "problema": "<? input_text ?>"
+      },
+      "conditions": "@impressora",
+      "dialog_node": "node_9_1639351987294",
+      "previous_sibling": "node_7_1639358524838"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": ""
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_4_1639354857406",
+      "conditions": "$webhook_result_1",
+      "dialog_node": "response_1_1639355142940",
+      "previous_sibling": "node_7_1639358903720"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "text": {
+          "values": [
+            "$webhook_result_1"
+          ],
+          "selection_policy": "sequential"
+        }
+      },
+      "parent": "node_4_1639354857406",
+      "conditions": "anything_else",
+      "dialog_node": "response_1_1639355145150",
+      "previous_sibling": "response_1_1639355142940"
+    },
+    {
+      "type": "slot",
+      "parent": "node_5_1639259999202",
+      "dialog_node": "slot_9_1639347030468",
+      "previous_sibling": "handler_1_1639347029777"
+    }
+  ],
+  "counterexamples": [],
+  "system_settings": {
+    "disambiguation": {
+      "prompt": "Você quis dizer:",
+      "enabled": true,
+      "randomize": true,
+      "max_suggestions": 5,
+      "suggestion_text_policy": "title",
+      "none_of_the_above_prompt": "Nenhuma das anteriores"
+    },
+    "system_entities": {
+      "enabled": true
+    },
+    "human_agent_assist": {
+      "prompt": "Você quis dizer:"
+    }
+  },
+  "learning_opt_out": false,
+  "name": "Fake Solutions IT",
+  "language": "pt-br",
+  "description": ""
+}
